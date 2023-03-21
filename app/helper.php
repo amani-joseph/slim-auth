@@ -6,6 +6,21 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Psr\Http\Message\UploadedFileInterface;
 
+if (!function_exists('passwordValidator')) {
+    function passwordValidator($password){
+        // Validate password strength
+        $uppercase = preg_match('@[A-Z]@', $password);
+        $lowercase = preg_match('@[a-z]@', $password);
+        $number    = preg_match('@[0-9]@', $password);
+        $specialChars = preg_match('@[^\w]@', $password);
+
+        if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+}
 
 if (!function_exists('env')) {
     function env($key, $default = false)
@@ -191,6 +206,59 @@ if (!function_exists('data_get')) {
         }
 
         return $target;
+    }
+}
+if (!function_exists('http_request')) {
+    /**
+     * @param $url
+     * @param $payload
+     * @param array $headers
+     * @param string $requestMethod
+     * @return bool|string
+     */
+    function http_request($url, $payload, $headers = [], $requestMethod = 'GET')
+    {
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_ENCODING, "");
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+        //curl_setopt($ch, CURLOPT_PROXY, $_ENV['PROXY_PORT']);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $requestMethod);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload ?: '');
+
+        $result = curl_exec($ch);
+
+        if ($result === false) {
+            curl_close($ch);
+            return false;
+        }
+        curl_close($ch);
+
+        return $result;
+    }
+}
+
+if (!function_exists('get_ip')) {
+    function get_ip()
+    {
+        //whether ip is from the share internet
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } //whether ip is from the proxy
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } //whether ip is from the remote address
+        else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
     }
 }
 

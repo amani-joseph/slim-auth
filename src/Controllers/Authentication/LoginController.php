@@ -27,11 +27,17 @@ class LoginController
         $userDetail = User::where('email', $email)->first(self::userColumns);
         if($password === $userDetail->password && $email === $userDetail->email)
         {
-            return $this->customResponse->is200Response($response,['message'=>'Login Successful']);
+            return $this->customResponse->is200Response($response,[
+                'message'=>'Login Successful',
+                'token'=>'YourTokenWillBeHere'
+                ]);
         }
         else
         {
-            return $this->customResponse->is401Response($response,['message'=>'Wrong email or password, try again']);
+            return $this->customResponse->is406Response($response,[
+                'message'=>'Wrong email or password, try again',
+
+            ]);
         }
     }
 }

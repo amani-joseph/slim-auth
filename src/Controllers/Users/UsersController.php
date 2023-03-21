@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Users;
 
+use App\Models\User;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Controllers\Utils\CustomResponse;
@@ -10,7 +11,7 @@ class UsersController
 {
     protected $user;
     private $customResponse;
-    const userColumns = ['id', 'first_name', 'surname', 'other_name', 'email', 'password', 'phone_number'];
+    const userColumns = ['id', 'first_name', 'surname', 'other_name', 'email', 'phone_number'];
 
     public function __construct()
     {
@@ -18,11 +19,14 @@ class UsersController
     }
     public function all(Request $request, Response $response): Response
     {
-
-        return $this->customResponse->is200Response($response, "All users");
+        DB::enableQueryLog();
+        $users = User::all();
+        return $this->customResponse->is200Response($response, $users);
     }
     public function user(Request $request, Response $response, $id): Response
     {
-        return $this->customResponse->is200Response($response, "UserID => {$id}");
+        DB::enableQueryLog();
+        $userDetail = User::where('id', $id)->first(self::userColumns);
+        return $this->customResponse->is200Response($response, $userDetail);
     }
 }

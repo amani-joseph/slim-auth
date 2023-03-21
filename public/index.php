@@ -14,6 +14,12 @@ $settings($container);
 $connection = require __DIR__ . '/../app/connection.php';
 $connection($container);
 
+$middleware = require __DIR__ . '/../app/middleware.php';
+$middleware($app);
+
+$logger = require __DIR__ . '/../app/logger.php';
+$logger($app);
+
 $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
 

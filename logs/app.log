@@ -1,0 +1,7 @@
+[2023-03-21T10:12:53.986561+03:00] slim-app.ERROR: Cannot create RouteContext before routing has been completed {"path":"/api/v1/auth/register","ip":"127.0.0.1"} []
+[2023-03-21T10:16:17.065715+03:00] slim-app.ERROR: Cannot create RouteContext before routing has been completed {"path":"/api/v1/auth/register","ip":"127.0.0.1"} []
+[2023-03-21T10:23:22.437398+03:00] slim-app.ERROR: Cannot create RouteContext before routing has been completed {"path":"/api/v1/auth/register","ip":"127.0.0.1"} []
+[2023-03-21T10:26:46.171516+03:00] slim-app.ERROR: Cannot create RouteContext before routing has been completed {"path":"/api/v1/auth/register","ip":"127.0.0.1"} []
+[2023-03-21T11:10:48.946561+03:00] slim-app.ERROR: Cannot create RouteContext before routing has been completed {"path":"/api/v1/auth/register","ip":"127.0.0.1"} []
+[2023-03-21T11:12:37.538353+03:00] slim-app.ERROR: Cannot create RouteContext before routing has been completed {"path":"/api/v1/auth/register","ip":"127.0.0.1"} []
+[2023-03-21T16:16:46.266104+03:00] slim-app.ERROR: Method not allowed. Must be one of: POST, OPTIONS {"path":"/api/v1/auth/register","ip":"127.0.0.1"} []

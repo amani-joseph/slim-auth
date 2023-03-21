@@ -11,7 +11,7 @@ class RegisterController
 {
     protected $user;
     private $customResponse;
-    const userColumns = ['id', 'first_name', 'surname', 'other_name', 'email', 'password', 'confirmPassword','phone_number'];
+    const userColumns = ['id', 'first_name', 'surname', 'other_name', 'email', 'password','phone_number'];
 
     public function __construct()
     {
@@ -19,26 +19,39 @@ class RegisterController
     }
     public function register(Request $request, Response $response): Response
     {
-        $inputData = $request->getParsedBody();
-        if ($inputData['password'] !== $inputData['confirmPassword']){
-            return $this->customResponse->is406Response($response, ["message"=>"Passwords dont match"]);
-        }
-        if ( strlen($inputData['password'])  < 8){
-            return $this->customResponse->is406Response($response, ["message"=>"Passwords length has to be between 8 - 50 characters long"]);
-        }
         DB::enableQueryLog();
+        $inputData = $request->getParsedBody();
+
+        $data = [
+            "first_name"=>$inputData['first_name'],
+            "surname"=>$inputData['surname'],
+            "other_name"=>$inputData['other_name'],
+            "email"=>$inputData['email'],
+            "password"=>$inputData['password'],
+            "phone_number"=>$inputData['phone_number'],
+        ];
+
+//        check for password validity and returns a boolean
+        if (!passwordValidator($inputData['password'])){
+            return $this->customResponse->is406Response($response, [
+                "message"=>'Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.'
+            ]);
+        }
+
+        if (!$inputData['password'] === $inputData['confirmPassword']){
+            return $this->customResponse->is406Response($response, [
+                "message"=>"Passwords don't match"
+            ]);
+        }
 
         $email = $inputData['email'];
         $userDetail = User::where('email', $email)->first(self::userColumns);
 
         if (!$userDetail->email){
-            $save_results = DB::table("users")->insert($inputData);
-            return $this->customResponse->is200Response($response, ["message"=>"User Created"]);
+            DB::table("users")->insert($data);
+            return $this->customResponse->is200Response($response, ["message"=>"Account created successfully."]);
         } else{
-            return $this->customResponse->is406Response($response, ["message"=>"User with this email address exists"]);
+            return $this->customResponse->is406Response($response, ["message"=>"A user with this email address already exists."]);
         }
-
-
-
     }
 }

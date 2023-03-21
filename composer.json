@@ -8,7 +8,9 @@
         "ext-pdo": "*",
         "deskola/simple-validator": "^1.0",
         "ext-json": "*",
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+        "monolog/monolog": "^2.8",
+        "ext-http": "*"
     },
     "autoload": {
         "psr-4": {
